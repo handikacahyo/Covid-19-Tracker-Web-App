@@ -33,7 +33,12 @@ export const FetchDailyData = () => {
     axios
       .get(`${url}/daily`)
       .then(({ data }) => {
-        setDaily(data);
+        const modifiedData = data.map((dailyData) => ({
+          confirmed: dailyData.confirmed.total,
+          deaths: dailyData.deaths.total,
+          date: dailyData.reportDate,
+        }));
+        setDaily(modifiedData);
       })
       .catch((error) => {
         console.log(error);
