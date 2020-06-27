@@ -6,7 +6,7 @@ to start from scratch:
    <br/> npx create-react-app <folder_name>
 
 2. Install some package :
-   <br /> npm install --save axios react-chartjs-2 react-countup classnames @material-ui/core
+   <br /> npm install --save axios react-chartjs-2 react-countup classnames @material-ui/core chart.js
 
 3. Finally, start program & make some web :
    <br/> npm start

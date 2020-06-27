@@ -1,15 +1,46 @@
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const url = "https://covid19.mathdro.id/api";
 
-export const fetchData = async () => {
-  try {
-    const {
-      data: { confirmed, recovered, deaths, lastUpdate },
-    } = await axios.get(url);
+const FetchApi = () => {
+  const [state, setData] = useState({
+    confirmed: {},
+    recovered: {},
+    deaths: {},
+    lastUpdate: "",
+  });
 
-    return { confirmed, recovered, deaths, lastUpdate };
-  } catch (error) {
-    console.log(error);
-  }
+  useEffect(() => {
+    axios
+      .get(url)
+      .then(({ data }) => {
+        const { confirmed, recovered, deaths, lastUpdate } = data;
+        setData({ confirmed, recovered, deaths, lastUpdate });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  return state;
 };
+
+export const FetchDailyData = () => {
+  const [daily, setDaily] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${url}/daily`)
+      .then(({ data }) => {
+        setDaily(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  return daily;
+};
+
+export default FetchApi;
