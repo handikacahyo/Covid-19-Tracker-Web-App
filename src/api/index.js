@@ -3,7 +3,7 @@ import axios from "axios";
 
 const url = "https://covid19.mathdro.id/api";
 
-const FetchApi = () => {
+export const FetchApi = () => {
   const [state, setData] = useState({
     confirmed: {},
     recovered: {},
@@ -48,4 +48,21 @@ export const FetchDailyData = () => {
   return daily;
 };
 
-export default FetchApi;
+export const FetchCountries = () => {
+  const [country, setCountry] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${url}/countries`)
+      .then(({ data }) => {
+        const { countries } = data;
+        const modifiedData = countries.map((country) => country.name);
+        setCountry(modifiedData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [setCountry]);
+
+  return country;
+};

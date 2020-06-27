@@ -1,16 +1,24 @@
 import React from "react";
 import { Cards, Chart, CountryPicker } from "./components";
 import styles from "./App.module.css";
-import FetchApi from "./api";
+import { FetchApi, FetchDailyData, FetchCountries } from "./api";
 
 function App() {
   const dataApi = FetchApi();
+  const dailyData = FetchDailyData();
+  const countries = FetchCountries();
+
+  const country = "";
+
+  const handleChange = (country) => {
+    console.log(country);
+  };
 
   return (
     <div className={styles.container}>
       <Cards data={dataApi} />
-      <CountryPicker />
-      <Chart />
+      <CountryPicker pick={countries} handleCountryChange={handleChange} />
+      <Chart daily={dailyData} />
     </div>
   );
 }
