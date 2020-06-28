@@ -1,10 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, Typography, Grid } from "@material-ui/core";
 import styles from "./Cards.module.css";
 import CountUp from "react-countup";
 import cx from "classnames";
+import { fetchApi } from "../../api";
 
-const Cards = ({ data: { confirmed, recovered, deaths, lastUpdate } }) => {
+const Cards = () => {
+  const [data, setData] = useState({
+    confirmed: {},
+    recovered: {},
+    deaths: {},
+    lastUpdate: "",
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchApi()
+        .then((data) => {
+          const { confirmed, recovered, deaths, lastUpdate } = data;
+          setData({ confirmed, recovered, deaths, lastUpdate });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchData();
+  }, [setData]);
+
+  const { confirmed, recovered, deaths, lastUpdate } = data;
+
   if (!confirmed) {
     return "Loading . . . ";
   }
@@ -25,7 +49,7 @@ const Cards = ({ data: { confirmed, recovered, deaths, lastUpdate } }) => {
             </Typography>
             <Typography variant="h5">
               <CountUp
-                start={0}
+                start={confirmed.value}
                 end={confirmed.value}
                 duration={2.5}
                 separator=","
@@ -52,7 +76,7 @@ const Cards = ({ data: { confirmed, recovered, deaths, lastUpdate } }) => {
             </Typography>
             <Typography variant="h5">
               <CountUp
-                start={0}
+                start={recovered.value}
                 end={recovered.value}
                 duration={2.5}
                 separator=","
@@ -79,7 +103,7 @@ const Cards = ({ data: { confirmed, recovered, deaths, lastUpdate } }) => {
             </Typography>
             <Typography variant="h5">
               <CountUp
-                start={0}
+                start={deaths.value}
                 end={deaths.value}
                 duration={2.5}
                 separator=","

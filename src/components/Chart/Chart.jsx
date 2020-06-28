@@ -1,8 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import styles from "./Chart.module.css";
+import { fetchDailyData } from "../../api";
 
-const Chart = ({ daily }) => {
+const Chart = () => {
+  const [daily, setDaily] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchDailyData()
+        .then((data) => {
+          const modifiedData = data.map((dailyData) => ({
+            confirmed: dailyData.confirmed.total,
+            deaths: dailyData.deaths.total,
+            date: dailyData.reportDate,
+          }));
+          setDaily(modifiedData);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchData();
+  }, [setDaily]);
+
   const lineChart = daily.length !== 0 && (
     <Line
       data={{
